@@ -1,4 +1,4 @@
-package com.uniovi.sdi2223307spring.services;
+package com.uniovi.sdi2223307spring;
 
 import java.util.Locale;
 import org.springframework.context.annotation.Bean;

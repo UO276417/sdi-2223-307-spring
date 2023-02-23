@@ -14,6 +14,9 @@ public class MarksController {
     @Autowired
     private MarksService marksService;
 
+    @Autowired
+    private UsersService usersService;
+
     @RequestMapping("/mark/list")
     public String getList(Model model) {
         model.addAttribute("markList", marksService.getMarks());
@@ -38,20 +41,25 @@ public class MarksController {
     }
 
     @RequestMapping(value = "/mark/add")
-    public String getMark() {
+    public String getMark(Model model) {
+        model.addAttribute("usersList", usersService.getUsers());
         return "mark/add";
     }
 
     @RequestMapping(value = "/mark/edit/{id}")
     public String getEdit(Model model, @PathVariable Long id) {
         model.addAttribute("mark", marksService.getMark(id));
+        model.addAttribute("usersList", usersService.getUsers());
         return "mark/edit";
     }
 
     @RequestMapping(value="/mark/edit/{id}", method=RequestMethod.POST)
     public String setEdit(@ModelAttribute Mark mark, @PathVariable Long id){
-        mark.setId(id);
-        marksService.addMark(mark);
+        Mark originalMark = marksService.getMark(id);
+        // modificar solo score y description
+        originalMark.setScore(mark.getScore());
+        originalMark.setDescription(mark.getDescription());
+        marksService.addMark(originalMark);
         return "redirect:/mark/details/"+id;
     }
 
