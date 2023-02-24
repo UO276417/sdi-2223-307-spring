@@ -2,15 +2,20 @@ package com.uniovi.sdi2223307spring.controllers;
 
 import com.uniovi.sdi2223307spring.entities.*;
 import com.uniovi.sdi2223307spring.services.*;
+import com.uniovi.sdi2223307spring.validators.*;
 import org.springframework.beans.factory.annotation.*;
 import org.springframework.stereotype.*;
 import org.springframework.ui.*;
+import org.springframework.validation.*;
+import org.springframework.validation.annotation.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 @Controller
 public class MarksController {
 
+    @Autowired
+    private MarkFormValidator marksValidator;
     @Autowired
     private MarksService marksService;
 
@@ -23,7 +28,15 @@ public class MarksController {
         return "mark/list";
     }
     @RequestMapping(value = "/mark/add", method = RequestMethod.POST)
-    public String setMark(@ModelAttribute Mark mark) {
+    public String setMark(@Validated Mark mark, BindingResult result, Model model) {
+        marksValidator.validate(mark, result);
+        model.addAttribute("usersList", usersService.getUsers());
+        model.addAttribute("mark",mark);
+
+        if(result.hasErrors()){
+            return "/mark/add";
+        }
+
         marksService.addMark(mark);
         return "redirect:/mark/list";
 
@@ -54,7 +67,12 @@ public class MarksController {
     }
 
     @RequestMapping(value="/mark/edit/{id}", method=RequestMethod.POST)
-    public String setEdit(@ModelAttribute Mark mark, @PathVariable Long id){
+    public String setEdit(@Validated Mark mark, @PathVariable Long id, BindingResult result){
+        marksValidator.validate(mark, result);
+        if(result.hasErrors()){
+            return "/mark/edit/" + id;
+        }
+
         Mark originalMark = marksService.getMark(id);
         // modificar solo score y description
         originalMark.setScore(mark.getScore());
