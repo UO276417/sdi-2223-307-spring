@@ -33,6 +33,17 @@ public class MarksController {
         model.addAttribute("markList", marksService.getMarks());
         return "mark/list";
     }
+    @RequestMapping(value = "/mark/{id}/resend", method = RequestMethod.GET)
+    public String setResendTrue(@PathVariable Long id) {
+        marksService.setMarkResend(true, id);
+        return "redirect:/mark/list";
+    }
+    @RequestMapping(value = "/mark/{id}/noresend", method = RequestMethod.GET)
+    public String setResendFalse(@PathVariable Long id) {
+        marksService.setMarkResend(false, id);
+        return "redirect:/mark/list";
+    }
+
     @RequestMapping(value = "/mark/add", method = RequestMethod.POST)
     public String setMark(@Validated Mark mark, BindingResult result, Model model) {
         marksValidator.validate(mark, result);

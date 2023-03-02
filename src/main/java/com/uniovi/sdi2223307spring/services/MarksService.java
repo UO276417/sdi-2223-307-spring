@@ -3,7 +3,11 @@ package com.uniovi.sdi2223307spring.services;
 import com.uniovi.sdi2223307spring.Repositories.*;
 import com.uniovi.sdi2223307spring.entities.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.security.core.*;
+import org.springframework.security.core.context.*;
 import org.springframework.stereotype.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import javax.annotation.PostConstruct;
 
@@ -31,6 +35,14 @@ public class MarksService {
         return marksRepository.findById(id).get();
     }
 
+    public void setMarkResend(boolean revised, Long id) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String dni = auth.getName();
+        Mark mark = marksRepository.findById(id).get();
+        if(mark.getUser().getDni().equals(dni) ) {
+            marksRepository.updateResend(revised, id);
+        }
+    }
     public void addMark(Mark mark) {
         // Si en Id es null le asignamos el ultimo + 1 de la lista
         marksRepository.save(mark);
