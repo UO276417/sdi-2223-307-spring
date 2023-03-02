@@ -17,6 +17,8 @@ public class UsersController {
     @Autowired
     private SignUpFormValidator signUpFormValidator;
     @Autowired
+    private RolesService rolesService;
+    @Autowired
     private UsersService usersService;
     @Autowired
     private SecurityService securityService;
@@ -36,6 +38,7 @@ public class UsersController {
 
     @RequestMapping(value = "/user/add")
     public String getUser(Model model) {
+        model.addAttribute("rolesList", rolesService.getRoles());
         model.addAttribute("usersList", usersService.getUsers());
         return "user/add";
     }
@@ -78,7 +81,7 @@ public class UsersController {
         if(result.hasErrors()){
             return "signup";
         }
-
+        user.setRole(rolesService.getRoles()[0]);
         usersService.addUser(user);
         securityService.autoLogin(user.getDni(), user.getPasswordConfirm());
         return "redirect:home";
