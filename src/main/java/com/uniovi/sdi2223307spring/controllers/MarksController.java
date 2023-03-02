@@ -11,9 +11,15 @@ import org.springframework.validation.annotation.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.servlet.http.*;
+import java.util.*;
+
 @Controller
 public class MarksController {
 
+    @Autowired
+    private HttpSession httpSession;
     @Autowired
     private MarkFormValidator marksValidator;
     @Autowired
@@ -24,6 +30,11 @@ public class MarksController {
 
     @RequestMapping("/mark/list")
     public String getList(Model model) {
+        Set<Mark> consultedList= (Set<Mark>) httpSession.getAttribute("consultedList");
+        if ( consultedList == null ) {
+            consultedList = new HashSet<Mark>();
+        }
+        model.addAttribute("consultedList", consultedList);
         model.addAttribute("markList", marksService.getMarks());
         return "mark/list";
     }
