@@ -11,8 +11,12 @@ import org.springframework.validation.annotation.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import java.security.Principal;
+import com.uniovi.sdi2223307spring.entities.User;
+
 
 import javax.servlet.http.*;
+import java.security.*;
 import java.util.*;
 
 @Controller
@@ -29,10 +33,13 @@ public class MarksController {
     private UsersService usersService;
 
     @RequestMapping("/mark/list")
-    public String getList(Model model) {
-        model.addAttribute("markList", marksService.getMarks());
+    public String getList(Model model, Principal principal){
+        String dni = principal.getName(); // DNI es el name de la autenticación
+        User user = usersService.getUserByDni(dni);
+        model.addAttribute("markList", marksService.getMarksForUser(user) );
         return "mark/list";
     }
+
     @RequestMapping(value = "/mark/{id}/resend", method = RequestMethod.GET)
     public String setResendTrue(@PathVariable Long id) {
         marksService.setMarkResend(true, id);
@@ -99,8 +106,10 @@ public class MarksController {
     }
 
     @RequestMapping("/mark/list/update")
-    public String updateList(Model model){
-        model.addAttribute("markList", marksService.getMarks() );
+    public String updateList(Model model, Principal principal) {
+        String dni = principal.getName(); // DNI es el name de la autenticación
+        User user = usersService.getUserByDni(dni);
+        model.addAttribute("markList", marksService.getMarksForUser(user));
         return "mark/list :: tableMarks";
     }
 
