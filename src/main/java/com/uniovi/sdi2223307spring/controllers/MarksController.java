@@ -4,13 +4,18 @@ import com.uniovi.sdi2223307spring.entities.*;
 import com.uniovi.sdi2223307spring.services.*;
 import com.uniovi.sdi2223307spring.validators.*;
 import org.springframework.beans.factory.annotation.*;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.ui.*;
 import org.springframework.validation.*;
 import org.springframework.validation.annotation.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.awt.print.*;
 import java.security.Principal;
 import com.uniovi.sdi2223307spring.entities.User;
 
@@ -33,14 +38,17 @@ public class MarksController {
     private UsersService usersService;
 
     @RequestMapping("/mark/list")
-    public String getList(Model model, Principal principal ,@RequestParam(value="", required = false) String searchText){
+    public String getList(Model model, Pageable pageable, Principal principal , @RequestParam(value="", required = false) String searchText){
         String dni = principal.getName(); // DNI es el name de la autenticación
         User user = usersService.getUserByDni(dni);
+        Page<Mark> marks = new PageImpl<Mark>(new LinkedList<Mark>());
         if(searchText != null && !searchText.isEmpty()){
-            model.addAttribute("markList", marksService.searchMarksByDescriptionAndNameForUser(searchText, user) );
+            marks =  marksService.searchMarksByDescriptionAndNameForUser(pageable, searchText, user);
         }else{
-            model.addAttribute("markList", marksService.getMarksForUser(user) );
+            marks = marksService.getMarksForUser(pageable, user);
         }
+        model.addAttribute("markList", marks.getContent());
+        model.addAttribute("page", marks);
 
         return "mark/list";
     }
@@ -111,10 +119,11 @@ public class MarksController {
     }
 
     @RequestMapping("/mark/list/update")
-    public String updateList(Model model, Principal principal) {
+    public String updateList(Model model,Pageable pageable, Principal principal) {
         String dni = principal.getName(); // DNI es el name de la autenticación
         User user = usersService.getUserByDni(dni);
-        model.addAttribute("markList", marksService.getMarksForUser(user));
+        Page<Mark> marks = marksService.getMarksForUser(pageable, user);
+        model.addAttribute("markList", marks.getContent());
         return "mark/list :: tableMarks";
     }
 
