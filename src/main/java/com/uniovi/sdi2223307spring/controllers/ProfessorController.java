@@ -35,6 +35,11 @@ public class ProfessorController {
         return "professor/details";
     }
 
+    @RequestMapping(value = "/professor/edit/{id}")
+    public String getEdit(Model model, @PathVariable Long id) {
+        model.addAttribute("professor", professorsService.getProfessor(id));
+        return "professor/edit";
+    }
     @RequestMapping("/professor/delete/{dni}")
     public String deleteProfessor(@PathVariable Long dni) {
         professorsService.deleteprofessor(dni);

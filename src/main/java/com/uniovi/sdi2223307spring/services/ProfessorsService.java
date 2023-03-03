@@ -28,5 +28,4 @@ public class ProfessorsService {
     public void deleteprofessor(Long dni) {
         professorsRepository.deleteById(dni);
     }
-
 }

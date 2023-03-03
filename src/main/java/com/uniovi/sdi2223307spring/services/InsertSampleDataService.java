@@ -3,18 +3,24 @@ package com.uniovi.sdi2223307spring.services;
 import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.PostConstruct;
+
+import com.uniovi.sdi2223307spring.entities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.uniovi.sdi2223307spring.entities.Mark;
-import com.uniovi.sdi2223307spring.entities.User;
+
 @Service
 public class InsertSampleDataService {
     @Autowired
     private UsersService usersService;
+
+    @Autowired
+    private ProfessorsService professorService;
     @Autowired
     private RolesService rolesService;
     @PostConstruct
     public void init() {
+        Professor prof = new Professor(23424242L, "Pablo", "Sanchez", "SO");
+        professorService.addProfessor(prof);
         User user1 = new User("99999990A", "Pedro", "Díaz");
         user1.setPassword("123456");
         user1.setRole(rolesService.getRoles()[0]);
