@@ -2,6 +2,7 @@ package com.uniovi.sdi2223307spring;
 
 import java.util.*;
 
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.*;
@@ -18,6 +19,12 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 @Configuration
 public class CustomConfiguration implements WebMvcConfigurer {
+
+    @Value("${spring.data.web.pageable.page-parameter}")
+    private int page;
+
+    @Value("${spring.data.web.pageable.default-page-size}")
+    private int pageSize;
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver localeResolver = new SessionLocaleResolver();
