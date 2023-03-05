@@ -175,5 +175,6 @@ class Sdi2223307SpringApplicationTests {
         String checkText = "img";
         WebElement result = driver.findElement(By.xpath("//html//body//img"));
         Assertions.assertEquals(checkText, result.getTagName());
+
     }
 }
