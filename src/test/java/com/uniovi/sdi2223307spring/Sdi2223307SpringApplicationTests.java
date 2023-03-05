@@ -125,4 +125,55 @@ class Sdi2223307SpringApplicationTests {
                 PO_Properties.getSPANISH());
         Assertions.assertEquals(checkText , result.get(0).getText());
     }
+
+    @Test
+    @Order(9)
+    public void PR07() {
+        //Vamos al formulario de logueo.
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+        //Rellenamos el formulario
+        PO_LoginView.fillLoginForm(driver, "99999990A", "123456");
+        //Comprobamos que entramos en la pagina privada de Alumno
+        String checkText = "img";
+        WebElement result = driver.findElement(By.xpath("//html//body//img"));
+        Assertions.assertEquals(checkText, result.getTagName());
+    }
+
+    @Test
+    @Order(9)
+    public void PR08() {
+        //Vamos al formulario de logueo.
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+        //Rellenamos el formulario
+        PO_LoginView.fillLoginForm(driver, "99999993D", "123456");
+        //Comprobamos que entramos en la pagina privada de Alumno
+        String checkText = "img";
+        WebElement result = driver.findElement(By.xpath("//html//body//img"));
+        Assertions.assertEquals(checkText, result.getTagName());
+    }
+    @Test
+    @Order(9)
+    public void PR09() {
+        //Vamos al formulario de logueo.
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+        //Rellenamos el formulario
+        PO_LoginView.fillLoginForm(driver, "99999988F", "123456");
+        //Comprobamos que entramos en la pagina privada de Alumno
+        String checkText = "img";
+        WebElement result = driver.findElement(By.xpath("//html//body//img"));
+        Assertions.assertEquals(checkText, result.getTagName());
+    }
+
+    @Test
+    @Order(9)
+    public void PR10() {
+        //Vamos al formulario de logueo.
+        PO_HomeView.clickOption(driver, "login", "class", "btn btn-primary");
+        //Rellenamos el formulario
+        PO_LoginView.fillLoginForm(driver, "99999990A", "123456");
+        //Comprobamos que entramos en la pagina privada de Alumno
+        String checkText = "img";
+        WebElement result = driver.findElement(By.xpath("//html//body//img"));
+        Assertions.assertEquals(checkText, result.getTagName());
+    }
 }
